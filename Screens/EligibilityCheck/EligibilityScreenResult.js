@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,10 +7,14 @@ import {
 } from 'react-native';
 import TextBox from '../../Components/TextBox';
 import Header from '../../Components/Header';
+import AuthContext from '../../Redux/AuthContext';
+import i18n from '../../Localization/LocalStore';
 
 
 const EligibilityScreenResult = (props) => {
-  const description = "Dear customer, you are eligible for the loan amounts \n20 USD, 30 USD, 40 USD, 50 USD.";
+  const { state } = useContext(AuthContext);
+  i18n.locale = state.locale;
+  const description = i18n.t('eligibilityResult') + "\n20 USD, 30 USD, 40 USD, 50 USD.";
 
   return (
     <View style={styles.container}>
@@ -21,7 +25,7 @@ const EligibilityScreenResult = (props) => {
           <View style={styles.buttonContainer}>
             <Pressable style={{ ...styles.button, ...styles.yesButton }}
               onPress={() => { props.navigation.navigate("HomeScreen") }}>
-              <Text style={styles.buttonText}>OK</Text>
+              <Text style={styles.buttonText}>{i18n.t('ok')}</Text>
             </Pressable>
           </View>
         </TextBox>

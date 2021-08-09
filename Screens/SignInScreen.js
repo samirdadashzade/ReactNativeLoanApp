@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useContext, createRef } from 'react';
 import {
   TextInput,
   View,
@@ -9,30 +9,41 @@ import {
   StatusBar,
   TouchableWithoutFeedback,
   StyleSheet,
+  Alert,
 } from 'react-native';
-
 import AuthContext from '../Redux/AuthContext';
+import i18n from '../Localization/LocalStore';
+import axios from 'axios';
 
 import { w, h } from '../Utils/Dimensions';
 import { logo } from '../Utils/Logo';
 
-const SignInScreen = ({navigation}) => {
-  const [phone, setPhone] = React.useState('');
-  const [pin, setPin] = React.useState('');
 
-  const { signIn } = React.useContext(AuthContext);
+const SignInScreen = ({ navigation }) => {
+  const [phone, setPhone] = React.useState('994556549492');
+  const [pin, setPin] = React.useState('2949');
+  const { state, authContext } = useContext(AuthContext);
+  i18n.locale = state.locale;
 
-  // const signInHandler = async() => {
-  //   try {
-  //     axios.get("https://httpbin.org/get").then(res => {
-  //       console.log("Response", res.data);
-  //     }).catch(error => {
-  //       Alert.alert("Error", error);
-  //     });
-  //   } catch (ex) {
-  //     Alert.alert("Catch Error", "Exception");
-  //   }
-  // }
+  const signInHandler = async () => {
+    // authContext.signIn("token");
+    try {
+      axios.post("https://mobi.simsight.net:14443/authorization/login_app",
+        { "phone": phone, "pin": pin, "finishOtherSession": true }).then(res => {
+          if (res.data.errCode == 0) {
+            const token = res.data.payload.appToken;
+            authContext.signIn(token);
+          }
+          else {
+            Alert.alert("Error", res.data.ErrMessage);
+          }
+        }).catch(error => {
+          Alert.alert("Error", error);
+        });
+    } catch (ex) {
+      Alert.alert("Catch Error", "Exception");
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -55,6 +66,7 @@ const SignInScreen = ({navigation}) => {
             returnKeyType="next"
             underlineColorAndroid="#f000"
             blurOnSubmit={false}
+            value={phone}
             onChangeText={setPhone}
           />
         </View>
@@ -71,15 +83,16 @@ const SignInScreen = ({navigation}) => {
             secureTextEntry={true}
             underlineColorAndroid="#f000"
             returnKeyType="next"
+            value={pin}
             onChangeText={setPin}
           />
         </View>
         <View>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => signIn({ phone: phone, pin: pin })}
+            onPress={signInHandler}
           >
-            <Text style={styles.singinButton}>Sign In</Text>
+            <Text style={styles.singinButton}>{i18n.t('signin')}</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,22 +7,26 @@ import {
 } from 'react-native';
 import TextBox from '../../Components/TextBox';
 import Header from '../../Components/Header';
-
+import AuthContext from '../../Redux/AuthContext';
+import i18n from '../../Localization/LocalStore';
+import printf from '../../Utils/Formatter';
 
 const CheckDebtStatusScreen = (props) => {
-  const description = `You have an outstanding amount of 22 USD which is due on 23.08.2021.`;
+  const { state } = useContext(AuthContext);
+  i18n.locale = state.locale;
+  const description = printf(i18n.t('debtStatusDesc'), {amount: '22 USD', date: '23.08.2021.'});
 
   return (
     <View style={styles.container}>
       <Header navigation={props.navigation} />
       <View style={styles.bottomBox}>
         <TextBox>
-          <Text style={{...styles.text, ...styles.header}}>Debt status:</Text>
+          <Text style={{...styles.text, ...styles.header}}>{i18n.t('debtStatus')}:</Text>
           <Text style={styles.text}>{description}</Text>
           <View style={styles.buttonContainer}>
             <Pressable style={{ ...styles.button, ...styles.yesButton }}
               onPress={() => { props.navigation.navigate("HomeScreen") }}>
-              <Text style={styles.buttonText}>OK</Text>
+              <Text style={styles.buttonText}>{i18n.t('ok')}</Text>
             </Pressable>
           </View>
         </TextBox>

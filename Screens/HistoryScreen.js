@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     StyleSheet,
     View,
@@ -9,8 +9,13 @@ import {
 } from 'react-native';
 import TextBox from '../Components/TextBox';
 import Header from '../Components/Header';
+import AuthContext from '../Redux/AuthContext';
+import i18n from '../Localization/LocalStore';
 
 const HistoryScreen = (props) => {
+    const { state } = useContext(AuthContext);
+    i18n.locale = state.locale;
+
     const [history, setHistory] = React.useState([
         {
             id: 1,
@@ -78,7 +83,7 @@ const HistoryScreen = (props) => {
                 const longDesc = genLongDesc(item);
 
                 return (
-                    <Pressable key={item.id} onPress={() => Alert.alert("Details", longDesc)}>
+                    <Pressable key={item.id} onPress={() => Alert.alert(i18n.t('details'), longDesc)}>
                         <TextBox containerStyle={styles.textBox}>
                             <Text style={styles.text}>{shortDesc}</Text>
                         </TextBox>

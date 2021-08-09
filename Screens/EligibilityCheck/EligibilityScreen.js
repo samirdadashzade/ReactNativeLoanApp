@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,9 +7,13 @@ import {
 } from 'react-native';
 import TextBox from '../../Components/TextBox';
 import Header from '../../Components/Header';
+import AuthContext from '../../Redux/AuthContext';
+import i18n from '../../Localization/LocalStore';
 
 const EligibilityScreen = (props) => {
-  const description = "Your eligibility will be checked based on your transactional data. Do you agree to share your data for that purpose? \nYou can read Terms and Conditions by clicking on the left menu.";
+  const { state } = useContext(AuthContext);
+  i18n.locale = state.locale;
+  const description = i18n.t('eligibilityDesc');
 
   return (
     <View style={styles.container}>
@@ -20,11 +24,11 @@ const EligibilityScreen = (props) => {
           <View style={styles.buttonContainer}>
             <Pressable style={{ ...styles.button, ...styles.yesButton }}
               onPress={() => {props.navigation.navigate("EligibilityScreenResult")}}>
-              <Text style={styles.buttonText}>Yes</Text>
+              <Text style={styles.buttonText}>{i18n.t('yes')}</Text>
             </Pressable>
             <Pressable style={{ ...styles.button, ...styles.noButton }} 
               onPress={() => {props.navigation.navigate("HomeScreen")}}>
-              <Text style={styles.buttonText}>No</Text>
+              <Text style={styles.buttonText}>{i18n.t('no')}</Text>
             </Pressable>
           </View>
         </TextBox>

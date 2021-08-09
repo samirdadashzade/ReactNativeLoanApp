@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -6,40 +6,44 @@ import {
 } from 'react-native';
 import Header from '../Components/Header';
 import { w, h } from '../Utils/Dimensions';
-
+import AuthContext from '../Redux/AuthContext';
+import i18n from '../Localization/LocalStore';
 
 const HomeScreen = (props) => {
+  const { state } = useContext(AuthContext);
+  i18n.locale = state.locale;
+
   return (
     <View style={styles.container}>
       <Header navigation={props.navigation} />
       <View style={styles.box}>
-        <Text style={{...styles.textDefault, ...styles.textBalance}}>BALANCE</Text>
+        <Text style={{...styles.textDefault, ...styles.textBalance}}>{i18n.t('balance')}</Text>
         <Text style={{...styles.textDefault, ...styles.textBalance}}>17.5</Text>
       </View>
       <View style={styles.first2butcont}>
         <View style={styles.leftbox2} onTouchEnd={() => props.navigation.navigate("EligibilityScreen")}>
-          <Text style={styles.textDefault}>ELIGIBILITY</Text>
-          <Text style={styles.textDefault}>CHECK</Text>
+          <Text style={styles.textDefault}>{i18n.t('eligibility')}</Text>
+          <Text style={styles.textDefault}>{i18n.t('check')}</Text>
         </View>
         <View style={styles.rightbox2} onTouchEnd={() => props.navigation.navigate("CheckDebtStatusScreen")}>
-          <Text style={styles.textDefault}>CHECK</Text>
-          <Text style={styles.textDefault}>DEBT</Text>
-          <Text style={styles.textDefault}>STATUS</Text>
+          <Text style={styles.textDefault}>{i18n.t('check')}</Text>
+          <Text style={styles.textDefault}>{i18n.t('debt')}</Text>
+          <Text style={styles.textDefault}>{i18n.t('status')}</Text>
         </View>
       </View>
       <View style={styles.last2butcont}>
         <View style={styles.leftbox3} onTouchEnd={() => props.navigation.navigate("ApplyLoanScreen")}>
-          <Text style={styles.textDefault}>APPLY FOR</Text>
-          <Text style={styles.textDefault}>A LOAN</Text>
+          <Text style={styles.textDefault}>{i18n.t('apply')}</Text>
+          <Text style={styles.textDefault}>{i18n.t('loan')}</Text>
         </View>
         <View style={styles.rightbox3} onTouchEnd={() => props.navigation.navigate("RepayLoanScreen")}>
-          <Text style={styles.textDefault}>REPAY</Text>
-          <Text style={styles.textDefault}>MY LOAN</Text>
+          <Text style={styles.textDefault}>{i18n.t('repay')}</Text>
+          <Text style={styles.textDefault}>{i18n.t('myLoan')}</Text>
         </View>
       </View>
       <View style={styles.bottominfo}>
         <View style={styles.bottombox}>
-          <Text style={{...styles.textDefault, fontSize: 12}}>Demo Mobile Wallet App</Text>
+          <Text style={{...styles.textDefault, fontSize: 12}}>{i18n.t('demoApp')}</Text>
         </View>
       </View>
     </View>
@@ -56,7 +60,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF', 
     fontWeight: 'bold', 
     fontFamily: 'ArialRoundedMTBold', 
-    fontSize: 25 
+    fontSize: 25,
+    textAlign: 'center'
   },
   textBalance: {
     fontSize: 30,

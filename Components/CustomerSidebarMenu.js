@@ -1,12 +1,14 @@
 // https://aboutreact.com/react-native-login-and-signup/
 
 // Import React and Component
-import React from 'react';
+import React, { useContext } from 'react';
 import {View, Text, Alert, StyleSheet} from 'react-native';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import i18n from '../Localization/LocalStore';
 
 
-const CustomSidebarMenu = (props) => {
+export default function CustomSidebarMenu(props) {
+  // const { state } = useContext(AuthContext);
 
   return (
     <View style={stylesSidebar.sideMenuContainer}>
@@ -27,24 +29,24 @@ const CustomSidebarMenu = (props) => {
         <DrawerItem
           label={({color}) => 
             <Text style={{color: '#d8d8d8'}}>
-              Logout
+              {i18n.t('logout')}
             </Text>
           }
           onPress={() => {
             props.navigation.toggleDrawer();
             Alert.alert(
-              'Logout',
-              'Are you sure? You want to logout?',
+              i18n.t('logout'),
+              i18n.t('logoutConfirmation'),
               [
                 {
-                  text: 'Yes',
+                  text: i18n.t('yes'),
                   onPress: () => {
                     // props.onSignOut();
                     return null;
                   },
                 },
                 {
-                  text: 'No',
+                  text: i18n.t('no'),
                   onPress: () => {
                     // props.onSignOut();
                     return null;
@@ -98,4 +100,4 @@ const stylesSidebar = StyleSheet.create({
   },
 });
 
-export default CustomSidebarMenu;
+// export default CustomSidebarMenu;

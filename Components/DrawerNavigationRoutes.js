@@ -1,7 +1,7 @@
 // https://aboutreact.com/react-native-login-and-signup/
 
 // Import React
-import React from 'react';
+import React, {useContext} from 'react';
 
 // Import Navigators from React Navigation
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -16,12 +16,14 @@ import HistoryScreenStack from './HistoryScreenStack';
 import SettingScreenStack from './SettingScreenStack';
 import TermsConditionScreenStack from './TermsConditionScreenStack';
 import ActionsScreenStack from './ActionsScreenStack';
+import i18n from '../Localization/LocalStore';
 
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigatorRoutes = (props) => {
-  const { signOut } = React.useContext(AuthContext);
+  const { state } = useContext(AuthContext);
+  i18n.locale = state.locale;
 
   return (
     <Drawer.Navigator
@@ -37,32 +39,32 @@ const DrawerNavigatorRoutes = (props) => {
     >
       <Drawer.Screen
         name="msisdn"
-        options={{ drawerLabel: 'MSISDN', title: "HomeScreen" }}
+        options={{ drawerLabel: i18n.t("home"), title: "HomeScreen" }}
         component={HomeScreenStack}
       />
       <Drawer.Screen
         name="ActionsScreenStack"
-        options={{ drawerLabel: 'Actions' }}
+        options={{ drawerLabel: i18n.t("actions") }}
         component={ActionsScreenStack}
       />
       <Drawer.Screen
         name="History"
-        options={{ drawerLabel: 'History' }}
+        options={{ drawerLabel: i18n.t("history") }}
         component={HistoryScreenStack}
       />
       <Drawer.Screen
         name="Settings"
-        options={{ drawerLabel: 'Settings' }}
+        options={{ drawerLabel: i18n.t("settings") }}
         component={SettingScreenStack}
       />
       <Drawer.Screen
         name="About Simbrella"
-        options={{ drawerLabel: 'About Simbrella' }}
+        options={{ drawerLabel: i18n.t("aboutSimbrella") }}
         component={AboutScreenStack}
       />
       <Drawer.Screen
         name="Terms and Conditions"
-        options={{ drawerLabel: 'Terms and Conditions' }}
+        options={{ drawerLabel: i18n.t("tc") }}
         component={TermsConditionScreenStack}
       />
     </Drawer.Navigator>

@@ -8,6 +8,8 @@ import DrawerNavigatorRoutes from './Components/DrawerNavigationRoutes';
 import SignInScreen from './Screens/SignInScreen';
 import SplashScreen from './Screens/SplashScreen';
 import AuthContext from './Redux/AuthContext';
+import i18n from './Localization/LocalStore';
+
 
 const Stack = createStackNavigator();
 
@@ -34,12 +36,18 @@ export default App = ({ navigation }) => {
             isSignout: true,
             userToken: null,
           };
+        case 'CHANGE_LANG':
+          return {
+            ...prevState,
+            locale: action.token
+          }
       }
     },
     {
       isLoading: true,
       isSignout: false,
       userToken: null,
+      locale: "en"
     }
   );
 
@@ -73,7 +81,7 @@ export default App = ({ navigation }) => {
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: 'SIGN_IN', token: data });
       },
       signOut: () => {
         dispatch({ type: 'SIGN_OUT' })
@@ -86,12 +94,18 @@ export default App = ({ navigation }) => {
 
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
+      changeLang: (locale) => {
+        dispatch({ type: 'CHANGE_LANG', token: locale });
+        i18n.locale = locale;
+      }
     }),
     []
   );
 
+  i18n.locale = state.locale;
+
   return (
-    <AuthContext.Provider value={authContext}>
+    <AuthContext.Provider value={{ state, authContext }}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {state.isLoading ? (
